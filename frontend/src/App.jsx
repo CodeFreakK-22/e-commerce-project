@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Home from './pages/home'
+import Home from './pages/Home'
 import Navbar from './components/Navbar'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -8,13 +8,13 @@ import Contact from './pages/Contact'
 import Product from './pages/Product'
 import Cart from './pages/Cart'
 import Login from './pages/Login'
-import Placeorder from './pages/PlaceOrder'
+import Placeorder from './pages/Placeorder'
 import Orders from './pages/Orders'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Verify from './pages/verify'
+import Verify from './pages/Verify'
 
 
 const App = () => {

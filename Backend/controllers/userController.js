@@ -105,4 +105,48 @@ const adminLogin = async (req, res) => {
 
 }
 
-export { loginUser, registerUser, adminLogin }
+
+// GET PROFILE
+const getProfile = async (req, res) => {
+    try {
+
+        const user = await userModel
+            .findById(req.body.userId)
+            .select("-password");
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        res.json({ success: true, user });
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+
+// UPDATE PROFILE
+const updateProfile = async (req, res) => {
+    try {
+
+        const { name, dob, phone } = req.body;
+
+        const updatedUser = await userModel
+            .findByIdAndUpdate(
+                req.body.userId,
+                { name, dob, phone },
+                { new: true }
+            )
+            .select("-password");
+
+        res.json({ success: true, user: updatedUser });
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export { loginUser, registerUser, adminLogin, getProfile, updateProfile }

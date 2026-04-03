@@ -1,7 +1,9 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+    const navigate = useNavigate();
     return (
         <div>
             <div className='flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm'>
@@ -9,7 +11,7 @@ const Footer = () => {
                 <div>
                     <img src={assets.logo} className='mb-5 w-32' />
                     <p className='w-full md:w-2/3 text-gray-600'>
-                        lorem ipsum is simply dummy text of the printing and typesetting industry.since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                        Zivara is your trusted destination for modern and stylish shopping. We offer a wide range of quality products designed to meet everyday needs with ease and reliability. Our goal is to provide a smooth and enjoyable shopping experience, combining great design, secure transactions, and fast delivery. Built with a passion for simplicity and innovation, Zivara continues to evolve to serve customers better every day.
                     </p>
                 </div>
 
@@ -18,10 +20,10 @@ const Footer = () => {
                         COMPANY
                     </p>
                     <ul className='flex flex-col gap-1 text-gray-600 cursor-pointer'>
-                        <li>Home</li>
-                        <li>About Us</li>
-                        <li>Contact</li>
-                        <li>Privacy Policy</li>
+                        <li onClick={() => navigate('/')}>Home</li>
+                        <li onClick={() => navigate('/about')}>About Us</li>
+                        <li onClick={() => navigate('/contact')}>Contact</li>
+                        <li onClick={() => navigate('/policy')}>Privacy Policy</li>
                     </ul>
                 </div>
 

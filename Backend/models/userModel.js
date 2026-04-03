@@ -9,8 +9,9 @@ const userSchema = new mongoose.Schema({
 
     dob: { type: Date },
     phone: { type: String }
-}, { minimize: false })
+
+}, { minimize: false });
 
 const userModel = mongoose.models.user || mongoose.model('user', userSchema);
 
-export default userModel
+export default userModel;

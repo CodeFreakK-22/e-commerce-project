@@ -157,7 +157,7 @@ const directResetPassword = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // 🔥 ADD THIS HERE
+
         if (password.length < 6) {
             return res.json({
                 success: false,

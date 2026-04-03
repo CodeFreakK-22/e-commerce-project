@@ -16,7 +16,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 import Profile from './pages/Profile'
-import Forgotpassword from "./pages/Forgotpassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import OurPolicy from './components/OurPolicy'
 
 const App = () => {
@@ -37,7 +37,7 @@ const App = () => {
         <Route path='/orders' element={<Orders />} />
         <Route path='/verify' element={<Verify />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path="/forgot-password" element={<Forgotpassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/policy" element={<OurPolicy />} />
       </Routes>
       <Footer />

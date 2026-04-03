@@ -3,7 +3,7 @@ import { ShopContext } from '../context/ShopContext'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-const Forgotpassword = () => {
+const ForgotPassword = () => {
 
     const { backendUrl, navigate } = useContext(ShopContext)
 
@@ -127,4 +127,4 @@ const Forgotpassword = () => {
     )
 }
 
-export default Forgotpassword
+export default ForgotPassword

@@ -11,7 +11,7 @@ const NewsletterBox = () => {
         <div className=' text-center'>
             <p className='text-2xl font-medium text-gray-800'>Subscribe & Get 20% Off</p>
             <p className='text-gray-400 mt-3'>
-                lorem ipsum is simply dummy text of the printing and typesetting industry.
+                Join our newsletter for updates, new arrivals, and exclusive offers.
             </p>
             <form className='w-full sm:w-1/2 flex items-center gap-3 mx-auto my-6 border pl-3'>
                 <input type="email" placeholder='Enter your email' className='w-full sm:flex-1 outline-none' required />

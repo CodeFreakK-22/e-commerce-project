@@ -17,7 +17,18 @@ const ShopContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({});
     const [products, setProducts] = useState([]);
     const [token, setToken] = useState('');
+    const [theme, setTheme] = useState(localStorage.getItem('theme') ? localStorage.getItem('theme') : 'light');
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [theme]);
 
 
     const addToCart = async (itemId, size) => {
@@ -166,8 +177,7 @@ const ShopContextProvider = (props) => {
         products, currency, delivery_fee,
         search, setSearch, showSearch, setShowSearch, cartItems, setCartItems, addToCart,
         getCartCount, updateQuantity, getCartAmount, navigate, backendUrl,
-        setToken, token
-
+        setToken, token, theme, setTheme
     }
 
     return (

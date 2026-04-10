@@ -5,17 +5,17 @@ const UserReviews = () => {
 
     const reviews = [
         {
-            name: "Dhanraj",
+            name: "Animesh",
             role: "Verified Buyer",
             text: "Amazing quality and super fast delivery. Totally worth it!"
         },
         {
-            name: "Gulshan",
+            name: "Satabdi",
             role: "Verified Buyer",
             text: "Loved the design and comfort. Will definitely shop again!"
         },
         {
-            name: "Vishal",
+            name: "Sonali",
             role: "Verified Buyer",
             text: "Smooth experience and great pricing. Highly recommended!"
         }
@@ -42,21 +42,28 @@ const UserReviews = () => {
             </h2>
 
             {/* CARDS */}
-            <div className='relative z-10 flex justify-center items-center gap-6 flex-wrap'>
+            <div className='relative z-10 flex sm:flex-wrap gap-4 sm:gap-6 
+            overflow-x-auto sm:overflow-visible px-4 sm:px-0 snap-x 
+            justify-start sm:justify-center'>
+
                 {reviews.map((review, index) => {
                     const color = avatarColors[index % avatarColors.length]
                     return (
-                        <div key={index} className='hover:scale-105 transition duration-300'>
+                        <div
+                            key={index}
+                            className='min-w-[260px] sm:min-w-0 snap-center hover:scale-105 transition duration-300'
+                        >
                             <div
                                 className='review-card w-[280px] p-6 rounded-xl border 
                                 backdrop-blur-md bg-white/70 dark:bg-gray-800/70 
                                 dark:border-gray-700 shadow-lg hover:shadow-2xl
                                 flex flex-col items-center'
                             >
+
                                 {/* AVATAR */}
                                 <div className={`w-14 h-14 rounded-full flex items-center 
-                                    justify-center text-lg font-semibold mb-4 
-                                    ${color.bg} ${color.text}`}>
+                                justify-center text-lg font-semibold mb-4 
+                                ${color.bg} ${color.text}`}>
                                     {getInitials(review.name)}
                                 </div>
 
@@ -79,7 +86,9 @@ const UserReviews = () => {
 
                                 {/* NAME & ROLE */}
                                 <p className='font-semibold dark:text-white text-sm'>{review.name}</p>
-                                <p className='text-xs text-gray-400 dark:text-gray-500 mt-0.5'>{review.role}</p>
+                                <p className='text-xs text-gray-400 dark:text-gray-500 mt-0.5'>
+                                    {review.role}
+                                </p>
 
                             </div>
                         </div>

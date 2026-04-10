@@ -241,11 +241,11 @@ const Product = () => {
 
                                             {/* AVATAR */}
                                             <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center 
-text-xs sm:text-sm font-semibold
-${index % 3 === 0 && 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'}
-${index % 3 === 1 && 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'}
-${index % 3 === 2 && 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'}
-`}>
+                                            text-xs sm:text-sm font-semibold
+                                            ${index % 3 === 0 && 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300'}
+                                            ${index % 3 === 1 && 'bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300'}
+                                            ${index % 3 === 2 && 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300'}
+                                            `}>
                                                 {r.name.slice(0, 2).toUpperCase()}
                                             </div>
 

@@ -46,10 +46,14 @@ const Product = () => {
     // FETCH PRODUCT
     useEffect(() => {
         const item = products.find((item) => item._id === productId);
+
         if (item) {
             setProductData(item);
             setImage(item.image[0]);
         }
+
+        window.scrollTo(0, 0);
+
     }, [productId, products]);
 
     // ADD TO CART

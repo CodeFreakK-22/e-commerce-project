@@ -32,7 +32,7 @@ const Product = () => {
             date: "Apr 2, 2025"
         },
         {
-            name: "Sonali Mishra",
+            name: "Shagun Hansdah",
             rating: 5,
             text: "Smooth experience and great pricing. Highly recommended!",
             date: "Apr 7, 2025"

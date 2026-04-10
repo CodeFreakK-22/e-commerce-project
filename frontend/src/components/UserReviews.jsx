@@ -43,15 +43,16 @@ const UserReviews = () => {
 
             {/* CARDS */}
             <div className='relative z-10 flex sm:flex-wrap gap-4 sm:gap-6 
-            overflow-x-auto sm:overflow-visible px-4 sm:px-0 snap-x 
-            justify-start sm:justify-center'>
+            overflow-x-auto sm:overflow-visible snap-x 
+            justify-start sm:justify-center 
+            pl-4 pr-2 sm:px-0'>
 
                 {reviews.map((review, index) => {
                     const color = avatarColors[index % avatarColors.length]
                     return (
                         <div
                             key={index}
-                            className='min-w-[260px] sm:min-w-0 snap-center hover:scale-105 transition duration-300'
+                            className='min-w-[85%] sm:min-w-0 max-w-[280px] snap-center hover:scale-105 transition duration-300'
                         >
                             <div
                                 className='review-card w-[280px] p-6 rounded-xl border 
@@ -99,5 +100,7 @@ const UserReviews = () => {
         </div>
     )
 }
+
+
 
 export default UserReviews

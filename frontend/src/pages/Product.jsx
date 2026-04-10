@@ -20,7 +20,7 @@ const Product = () => {
     // 🔥 REVIEW STATES
     const [reviews, setReviews] = useState([
         {
-            name: "Animesh Rao",
+            name: "Animesh Jena",
             rating: 5,
             text: "Amazing quality and super fast delivery. Totally worth it!",
             date: "Mar 28, 2025"
@@ -32,7 +32,7 @@ const Product = () => {
             date: "Apr 2, 2025"
         },
         {
-            name: "Shagun Hansdah",
+            name: "Dhaneswar Hansdah",
             rating: 5,
             text: "Smooth experience and great pricing. Highly recommended!",
             date: "Apr 7, 2025"

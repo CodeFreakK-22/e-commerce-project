@@ -15,7 +15,7 @@ const UserReviews = () => {
             text: "Loved the design and comfort. Will definitely shop again!"
         },
         {
-            name: "Sonali",
+            name: "Shagun",
             role: "Verified Buyer",
             text: "Smooth experience and great pricing. Highly recommended!"
         }

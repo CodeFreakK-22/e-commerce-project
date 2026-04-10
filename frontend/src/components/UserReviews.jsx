@@ -30,7 +30,7 @@ const UserReviews = () => {
     ]
 
     return (
-        <div className='py-20 text-center relative overflow-hidden isolate'>
+        <div className='py-24 sm:py-28 text-center relative isolate'>
 
             {/* GLOW */}
             <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
@@ -45,14 +45,15 @@ const UserReviews = () => {
             <div className='relative z-10 flex sm:flex-wrap gap-4 sm:gap-6 
             overflow-x-auto sm:overflow-visible snap-x 
             justify-start sm:justify-center 
-            pl-4 pr-2 sm:px-0'>
+            pl-4 pr-2 sm:px-0
+            pt-4 pb-4'>  {/* ← added pt-4 pb-4 so float has breathing room */}
 
                 {reviews.map((review, index) => {
                     const color = avatarColors[index % avatarColors.length]
                     return (
                         <div
                             key={index}
-                            className='min-w-[85%] sm:min-w-0 max-w-[280px] snap-center hover:scale-105 transition duration-300'
+                            className='review-wrapper min-w-[85%] sm:min-w-0 max-w-[280px] snap-center hover:scale-105 transition duration-300'
                         >
                             <div
                                 className='review-card w-[280px] p-6 rounded-xl border 
@@ -95,12 +96,11 @@ const UserReviews = () => {
                         </div>
                     )
                 })}
+
             </div>
 
         </div>
     )
 }
-
-
 
 export default UserReviews

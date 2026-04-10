@@ -56,11 +56,12 @@ a.active hr {
         animation: float 4s ease-in-out infinite;
     }
 
-    .review-card:nth-child(2) {
+    /* target the WRAPPER, not .review-card */
+    .review-wrapper:nth-child(2) .review-card {
         animation-delay: 1s;
     }
 
-    .review-card:nth-child(3) {
+    .review-wrapper:nth-child(3) .review-card {
         animation-delay: 2s;
     }
 

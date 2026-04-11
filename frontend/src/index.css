@@ -84,3 +84,119 @@ a.active hr {
         transform: translateY(0px);
     }
 }
+
+/* BASE */
+.Toastify__toast {
+    border-radius: 14px !important;
+    font-size: 13px !important;
+    font-family: inherit !important;
+    padding: 12px 16px !important;
+    box-shadow: none !important;
+    border: 0.5px solid transparent !important;
+    min-height: unset !important;
+}
+
+/* SUCCESS */
+.Toastify__toast--success {
+    background: #E1F5EE !important;
+    color: #085041 !important;
+    border-color: #9FE1CB !important;
+}
+
+.Toastify__toast--success .Toastify__progress-bar {
+    background: #0F6E56 !important;
+}
+
+.Toastify__toast--success .Toastify__toast-icon svg {
+    fill: #0F6E56 !important;
+}
+
+/* ERROR */
+.Toastify__toast--error {
+    background: #FCEBEB !important;
+    color: #791F1F !important;
+    border-color: #F7C1C1 !important;
+}
+
+.Toastify__toast--error .Toastify__progress-bar {
+    background: #E24B4A !important;
+}
+
+.Toastify__toast--error .Toastify__toast-icon svg {
+    fill: #E24B4A !important;
+}
+
+/* WARNING */
+.Toastify__toast--warning {
+    background: #FAEEDA !important;
+    color: #633806 !important;
+    border-color: #FAC775 !important;
+}
+
+.Toastify__toast--warning .Toastify__progress-bar {
+    background: #BA7517 !important;
+}
+
+.Toastify__toast--warning .Toastify__toast-icon svg {
+    fill: #BA7517 !important;
+}
+
+/* INFO */
+.Toastify__toast--info {
+    background: #E6F1FB !important;
+    color: #0C447C !important;
+    border-color: #B5D4F4 !important;
+}
+
+.Toastify__toast--info .Toastify__progress-bar {
+    background: #185FA5 !important;
+}
+
+.Toastify__toast--info .Toastify__toast-icon svg {
+    fill: #185FA5 !important;
+}
+
+/* DARK MODE */
+.dark .Toastify__toast--success {
+    background: #085041 !important;
+    color: #9FE1CB !important;
+    border-color: #0F6E56 !important;
+}
+
+.dark .Toastify__toast--error {
+    background: #501313 !important;
+    color: #F7C1C1 !important;
+    border-color: #A32D2D !important;
+}
+
+.dark .Toastify__toast--warning {
+    background: #412402 !important;
+    color: #FAC775 !important;
+    border-color: #854F0B !important;
+}
+
+.dark .Toastify__toast--info {
+    background: #042C53 !important;
+    color: #B5D4F4 !important;
+    border-color: #185FA5 !important;
+}
+
+/* CLOSE BUTTON */
+.Toastify__close-button {
+    color: inherit !important;
+    opacity: 0.5 !important;
+}
+
+.Toastify__close-button:hover {
+    opacity: 1 !important;
+}
+
+/* in your index.css */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden;
+    pointer-events: none;
+}

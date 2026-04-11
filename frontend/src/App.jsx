@@ -16,13 +16,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 import Profile from './pages/Profile'
-import ForgotPassword from "./pages/ForgotPassword";
+import Forgotpassword from "./pages/Forgotpassword";
 import OurPolicy from './components/OurPolicy'
 
 const App = () => {
   return (
     <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200'>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+      />
       <Navbar />
       <SearchBar />
       <Routes>
@@ -37,7 +46,7 @@ const App = () => {
         <Route path='/orders' element={<Orders />} />
         <Route path='/verify' element={<Verify />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/forgot-password" element={<Forgotpassword />} />
         <Route path="/policy" element={<OurPolicy />} />
       </Routes>
       <Footer />

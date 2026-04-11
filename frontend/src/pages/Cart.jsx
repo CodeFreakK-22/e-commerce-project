@@ -73,12 +73,9 @@ const Cart = () => {
                                             <span className='text-xs px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'>
                                                 Size: {item.size}
                                             </span>
-                                            <span className='text-sm font-medium dark:text-white'>
-                                                {currency}{productData.price}
-                                            </span>
                                         </div>
 
-                                        {/* QTY + PRICE */}
+                                        {/* QTY + SUBTOTAL */}
                                         <div className='flex items-center justify-between w-full gap-4 mt-2'>
                                             <div className='flex items-center gap-2'>
                                                 <button
@@ -128,6 +125,7 @@ const Cart = () => {
                                         <path d="M9 6V4h6v2" />
                                     </svg>
                                 </button>
+
                             </div>
                         )
                     }) : (
@@ -178,6 +176,7 @@ const Cart = () => {
 
                     </div>
                 )}
+
             </div>
         </div>
     )

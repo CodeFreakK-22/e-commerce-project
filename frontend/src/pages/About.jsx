@@ -50,7 +50,7 @@ const About = () => {
             {/* MAIN SECTION */}
             <div className='my-10 flex flex-col md:flex-row gap-16'>
                 <img
-                    className='w-full md:max-w-[450px]'
+                    className='w-full md:max-w-[450px] rounded-2xl object-cover dark:brightness-90'
                     src={assets.about_img}
                     alt=""
                 />

@@ -15,7 +15,8 @@ const Navbar = () => {
         setToken,
         setCartItems,
         theme,
-        setTheme
+        setTheme,
+        wishlist,        // ← added
     } = useContext(ShopContext)
 
     const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light')
@@ -56,7 +57,7 @@ const Navbar = () => {
                             to={to}
                             className={({ isActive }) =>
                                 `px-4 py-2 rounded-xl text-sm transition-all
-                            ${isActive
+                                ${isActive
                                     ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium'
                                     : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800'
                                 }`
@@ -74,8 +75,8 @@ const Navbar = () => {
                     <button
                         onClick={toggleTheme}
                         className='w-8 h-8 flex items-center justify-center rounded-xl
-                    text-gray-600 dark:text-gray-300
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                        text-gray-600 dark:text-gray-300
+                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
                     >
                         {theme === 'light' ? (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,19 +95,44 @@ const Navbar = () => {
                     <button
                         onClick={handleSearchClick}
                         className='w-8 h-8 flex items-center justify-center rounded-xl
-                    text-gray-600 dark:text-gray-300
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                        text-gray-600 dark:text-gray-300
+                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
                     >
                         <img src={assets.search_icon} className='w-4 dark:invert' alt="search" />
                     </button>
+
+                    {/* WISHLIST */}
+                    <Link
+                        to='/wishlist'
+                        className='relative w-8 h-8 flex items-center justify-center rounded-xl
+                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            className={`w-4 h-4 transition-all ${wishlist.length > 0
+                                ? 'fill-red-500 stroke-red-500'
+                                : 'fill-none stroke-gray-600 dark:stroke-gray-300'
+                                }`}
+                            strokeWidth="1.8"
+                        >
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                        {wishlist.length > 0 && (
+                            <span className='absolute -top-0.5 -right-0.5 w-4 h-4
+                            bg-red-500 text-white text-[9px] font-medium rounded-full
+                            flex items-center justify-center'>
+                                {wishlist.length}
+                            </span>
+                        )}
+                    </Link>
 
                     {/* PROFILE */}
                     <div className='group relative'>
                         <button
                             onClick={() => token ? null : navigate('/login')}
                             className='w-8 h-8 flex items-center justify-center rounded-xl
-                        text-gray-600 dark:text-gray-300
-                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                            text-gray-600 dark:text-gray-300
+                            hover:bg-gray-100 dark:hover:bg-gray-700 transition'
                         >
                             <img src={assets.profile_icon} className='w-4 dark:invert' alt="" />
                         </button>
@@ -114,20 +140,20 @@ const Navbar = () => {
                         {token && (
                             <div className='group-hover:block hidden absolute right-0 pt-2 z-20'>
                                 <div className='flex flex-col w-44 py-2 rounded-2xl border
-                            border-gray-100 dark:border-gray-700
-                            bg-white dark:bg-gray-800
-                            shadow-sm overflow-hidden'>
+                                border-gray-100 dark:border-gray-700
+                                bg-white dark:bg-gray-800
+                                shadow-sm overflow-hidden'>
                                     {[
                                         { label: 'My profile', action: () => navigate('/profile') },
                                         { label: 'My orders', action: () => navigate('/orders') },
+                                        { label: 'My wishlist', action: () => navigate('/wishlist') },
                                     ].map(({ label, action }) => (
                                         <button
                                             key={label}
                                             onClick={action}
                                             className='text-left px-4 py-2.5 text-sm
-                                        text-gray-600 dark:text-gray-300
-                                        hover:bg-gray-50 dark:hover:bg-gray-700
-                                        transition'
+                                            text-gray-600 dark:text-gray-300
+                                            hover:bg-gray-50 dark:hover:bg-gray-700 transition'
                                         >
                                             {label}
                                         </button>
@@ -136,8 +162,7 @@ const Navbar = () => {
                                         <button
                                             onClick={logout}
                                             className='w-full text-left px-4 py-2.5 text-sm
-                                        text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20
-                                        transition'
+                                            text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition'
                                         >
                                             Logout
                                         </button>
@@ -149,23 +174,22 @@ const Navbar = () => {
 
                     {/* CART */}
                     <Link to='/cart' className='relative w-8 h-8 flex items-center justify-center rounded-xl
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition'>
+                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'>
                         <img src={assets.cart_icon} className='w-4 dark:invert' alt="" />
                         {getCartCount() > 0 && (
-                            <span className='absolute -top-0.5 -right-0.5 w-4 h-4 text-center
-                        bg-gray-900 dark:bg-white
-                        text-white dark:text-gray-900
-                        text-[9px] font-medium rounded-full flex items-center justify-center'>
+                            <span className='absolute -top-0.5 -right-0.5 w-4 h-4
+                            bg-gray-900 dark:bg-white text-white dark:text-gray-900
+                            text-[9px] font-medium rounded-full flex items-center justify-center'>
                                 {getCartCount()}
                             </span>
                         )}
                     </Link>
 
-                    {/* MOBILE MENU BUTTON */}
+                    {/* MOBILE MENU */}
                     <button
                         onClick={() => setVisible(true)}
                         className='sm:hidden w-8 h-8 flex items-center justify-center rounded-xl
-                    hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
                     >
                         <img src={assets.menu_icon} className='w-4 dark:invert' alt="" />
                     </button>
@@ -175,20 +199,20 @@ const Navbar = () => {
 
             {/* MOBILE DRAWER */}
             <div className={`fixed inset-0 z-30 sm:hidden transition-all duration-300
-            ${visible ? 'visible' : 'invisible'}`}>
+                ${visible ? 'visible' : 'invisible'}`}>
 
                 {/* BACKDROP */}
                 <div
                     onClick={() => setVisible(false)}
                     className={`absolute inset-0 bg-black transition-opacity duration-300
-                ${visible ? 'opacity-40' : 'opacity-0'}`}
+                    ${visible ? 'opacity-40' : 'opacity-0'}`}
                 />
 
                 {/* PANEL */}
-                <div className={`absolute top-0 right-0 h-full w-72 
-            bg-white dark:bg-gray-900 
-            transition-transform duration-300 ease-in-out flex flex-col
-            ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
+                <div className={`absolute top-0 right-0 h-full w-72
+                    bg-white dark:bg-gray-900
+                    transition-transform duration-300 ease-in-out flex flex-col
+                    ${visible ? 'translate-x-0' : 'translate-x-full'}`}>
 
                     {/* DRAWER HEADER */}
                     <div className='flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-gray-700'>
@@ -196,7 +220,7 @@ const Navbar = () => {
                         <button
                             onClick={() => setVisible(false)}
                             className='w-8 h-8 flex items-center justify-center rounded-xl
-                        hover:bg-gray-100 dark:hover:bg-gray-700 transition'
+                            hover:bg-gray-100 dark:hover:bg-gray-700 transition'
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className='text-gray-500 dark:text-gray-400'>
                                 <line x1="18" y1="6" x2="6" y2="18" />
@@ -214,7 +238,7 @@ const Navbar = () => {
                                 onClick={() => setVisible(false)}
                                 className={({ isActive }) =>
                                     `px-4 py-3 rounded-xl text-sm transition-all
-                                ${isActive
+                                    ${isActive
                                         ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium'
                                         : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
                                     }`
@@ -232,23 +256,31 @@ const Navbar = () => {
                                 <button
                                     onClick={() => { navigate('/profile'); setVisible(false) }}
                                     className='w-full text-left px-4 py-3 rounded-xl text-sm
-                                text-gray-600 dark:text-gray-300
-                                hover:bg-gray-50 dark:hover:bg-gray-800 transition'
+                                    text-gray-600 dark:text-gray-300
+                                    hover:bg-gray-50 dark:hover:bg-gray-800 transition'
                                 >
                                     My profile
                                 </button>
                                 <button
                                     onClick={() => { navigate('/orders'); setVisible(false) }}
                                     className='w-full text-left px-4 py-3 rounded-xl text-sm
-                                text-gray-600 dark:text-gray-300
-                                hover:bg-gray-50 dark:hover:bg-gray-800 transition'
+                                    text-gray-600 dark:text-gray-300
+                                    hover:bg-gray-50 dark:hover:bg-gray-800 transition'
                                 >
                                     My orders
                                 </button>
                                 <button
+                                    onClick={() => { navigate('/wishlist'); setVisible(false) }}
+                                    className='w-full text-left px-4 py-3 rounded-xl text-sm
+                                    text-gray-600 dark:text-gray-300
+                                    hover:bg-gray-50 dark:hover:bg-gray-800 transition'
+                                >
+                                    My wishlist
+                                </button>
+                                <button
                                     onClick={() => { logout(); setVisible(false) }}
                                     className='w-full text-left px-4 py-3 rounded-xl text-sm
-                                text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition'
+                                    text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition'
                                 >
                                     Logout
                                 </button>
@@ -257,9 +289,8 @@ const Navbar = () => {
                             <button
                                 onClick={() => { navigate('/login'); setVisible(false) }}
                                 className='w-full py-3 rounded-xl text-sm font-medium
-                            bg-gray-900 dark:bg-white
-                            text-white dark:text-gray-900
-                            hover:opacity-90 transition'
+                                bg-gray-900 dark:bg-white text-white dark:text-gray-900
+                                hover:opacity-90 transition'
                             >
                                 Sign in
                             </button>

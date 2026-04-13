@@ -16,8 +16,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
 import Profile from './pages/Profile'
-import ForgotPassword from './pages/ForgotPassword'
+import ForgotPassword from './pages/Forgotpassword'
 import OurPolicy from './components/OurPolicy'
+import WishList from './pages/WishList'
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/policy" element={<OurPolicy />} />
+        <Route path="/wishlist" element={<WishList />} />
       </Routes>
       <Footer />
     </div>

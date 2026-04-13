@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContext'
 import { toast } from 'react-toastify'
 
 const Productitem = ({ id, image, name, price }) => {
 
-    const { currency, addToCart } = useContext(ShopContext)
-    const [liked, setLiked] = useState(false)
+    const { currency, addToCart, addToWishlist, isWishlisted } = useContext(ShopContext)
+    const liked = isWishlisted(id)
 
     const handleAddToCart = (e) => {
         e.preventDefault()
@@ -18,7 +18,7 @@ const Productitem = ({ id, image, name, price }) => {
     const handleWishlist = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        setLiked(prev => !prev)
+        addToWishlist(id)
         toast.success(liked ? 'Removed from wishlist' : 'Added to wishlist')
     }
 
@@ -40,7 +40,7 @@ const Productitem = ({ id, image, name, price }) => {
                         transition-transform duration-500 group-hover:scale-105'
                     />
 
-                    {/* WISHLIST — always visible on mobile, hover on desktop */}
+                    {/* WISHLIST */}
                     <button
                         onClick={handleWishlist}
                         className='absolute top-2.5 right-2.5 z-10
@@ -61,7 +61,7 @@ const Productitem = ({ id, image, name, price }) => {
                         </svg>
                     </button>
 
-                    {/* QUICK ADD — slides up on desktop hover */}
+                    {/* QUICK ADD — desktop hover */}
                     <div className='absolute bottom-0 left-0 right-0 p-2.5
                         hidden sm:block
                         translate-y-full group-hover:translate-y-0
@@ -80,13 +80,12 @@ const Productitem = ({ id, image, name, price }) => {
                 </div>
 
                 {/* INFO */}
-                {/* INFO */}
                 <div className='p-3'>
                     <p className='text-sm font-medium dark:text-white line-clamp-1 mb-1'>
                         {name}
                     </p>
 
-                    {/* MOBILE: price + cart only */}
+                    {/* MOBILE: price + cart */}
                     <div className='flex items-center justify-between gap-2 sm:hidden'>
                         <p className='text-sm text-gray-500 dark:text-gray-400'>
                             {currency}{price}
@@ -94,9 +93,9 @@ const Productitem = ({ id, image, name, price }) => {
                         <button
                             onClick={handleAddToCart}
                             className='w-7 h-7 rounded-lg flex items-center justify-center
-            bg-gray-900 dark:bg-white
-            text-white dark:text-gray-900
-            hover:opacity-85 transition'
+                            bg-gray-900 dark:bg-white
+                            text-white dark:text-gray-900
+                            hover:opacity-85 transition'
                         >
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
@@ -105,7 +104,7 @@ const Productitem = ({ id, image, name, price }) => {
                         </button>
                     </div>
 
-                    {/* DESKTOP: just price */}
+                    {/* DESKTOP: price */}
                     <p className='hidden sm:block text-sm text-gray-500 dark:text-gray-400'>
                         {currency}{price}
                     </p>

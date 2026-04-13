@@ -204,6 +204,7 @@ const Profile = () => {
                     <div className="flex flex-col divide-y divide-gray-100 dark:divide-gray-700">
                         {[
                             { label: "My orders", path: "/orders" },
+                            { label: "My wishlist", path: "/wishlist" },
                             { label: "Saved addresses", path: "/addresses" },
                         ].map((link, i) => (
                             <button

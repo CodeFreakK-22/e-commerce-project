@@ -34,16 +34,47 @@ const ShopContextProvider = (props) => {
         }
     }, [theme]);
 
-    // WISHLIST
-    const addToWishlist = (productId) => {
+    // WISHLIST — toggle with optimistic update
+    const addToWishlist = async (productId) => {
+        // update UI instantly
         setWishlist(prev =>
             prev.includes(productId)
                 ? prev.filter(id => id !== productId)
                 : [...prev, productId]
         )
+
+        // sync to backend if logged in
+        if (token) {
+            try {
+                await axios.post(
+                    backendUrl + '/api/wishlist/toggle',
+                    { productId },
+                    { headers: { token } }
+                )
+            } catch (error) {
+                console.log(error)
+                toast.error(error.message)
+            }
+        }
     }
 
     const isWishlisted = (productId) => wishlist.includes(productId)
+
+    // LOAD wishlist from backend
+    const getUserWishlist = async (token) => {
+        try {
+            const response = await axios.post(
+                backendUrl + '/api/wishlist/get',
+                {},
+                { headers: { token } }
+            )
+            if (response.data.success) {
+                setWishlist(response.data.wishlist)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     // CART
     const addToCart = async (itemId, size) => {
@@ -175,8 +206,10 @@ const ShopContextProvider = (props) => {
 
     useEffect(() => {
         if (!token && localStorage.getItem('token')) {
-            setToken(localStorage.getItem('token'));
-            getUserCart(localStorage.getItem('token'));
+            const savedToken = localStorage.getItem('token')
+            setToken(savedToken)
+            getUserCart(savedToken)
+            getUserWishlist(savedToken)  // ← load wishlist on app start
         }
     }, [])
 

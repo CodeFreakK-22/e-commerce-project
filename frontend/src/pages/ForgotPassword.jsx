@@ -4,50 +4,22 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 const ForgotPassword = () => {
-
     const { backendUrl, navigate } = useContext(ShopContext)
 
-    const [step, setStep] = useState(1)
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [showPassword, setShowPassword] = useState(false)
+    const [submitted, setSubmitted] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const checkEmailHandler = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         try {
             setLoading(true)
-            const res = await axios.post(
-                backendUrl + '/api/user/check-email', { email }
-            )
-            if (res.data.success) {
-                toast.success('Email found')
-                setStep(2)
-            } else {
-                toast.error(res.data.message)
-            }
+            await axios.post(backendUrl + '/api/user/forgot-password', { email })
+            // Always show success — never reveal if email exists or not
+            setSubmitted(true)
         } catch (error) {
-            toast.error('Something went wrong')
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const resetPasswordHandler = async (e) => {
-        e.preventDefault()
-        try {
-            setLoading(true)
-            const res = await axios.post(
-                backendUrl + '/api/user/direct-reset-password', { email, password }
-            )
-            if (res.data.success) {
-                toast.success('Password updated')
-                navigate('/login')
-            } else {
-                toast.error(res.data.message)
-            }
-        } catch (error) {
-            toast.error('Error resetting password')
+            // Even on error, show same message to prevent enumeration
+            setSubmitted(true)
         } finally {
             setLoading(false)
         }
@@ -73,51 +45,23 @@ const ForgotPassword = () => {
                         Account recovery
                     </span>
                     <h1 className='prata-regular text-3xl dark:text-white'>
-                        {step === 1 ? 'Forgot password' : 'Reset password'}
+                        {submitted ? 'Check your inbox' : 'Forgot password'}
                     </h1>
                     <p className='text-xs text-gray-400 dark:text-gray-500 mt-2'>
-                        {step === 1
-                            ? 'Enter your email address to verify your account'
-                            : 'Choose a new password for your account'
+                        {submitted
+                            ? `If ${email} is registered, you'll receive a reset link shortly.`
+                            : 'Enter your email address to receive a reset link'
                         }
                     </p>
                 </div>
 
-                {/* STEP INDICATOR */}
-                <div className='flex items-center gap-2 mb-6'>
-                    {[1, 2].map((s) => (
-                        <React.Fragment key={s}>
-                            <div className={`flex items-center gap-2`}>
-                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-medium transition-all
-                                    ${step >= s
-                                        ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900'
-                                        : 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500'
-                                    }`}>
-                                    {step > s ? (
-                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                            <polyline points="20 6 9 17 4 12" />
-                                        </svg>
-                                    ) : s}
-                                </div>
-                                <span className={`text-xs ${step >= s ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}`}>
-                                    {s === 1 ? 'Verify email' : 'New password'}
-                                </span>
-                            </div>
-                            {s < 2 && (
-                                <div className={`flex-1 h-px transition-all ${step > s ? 'bg-gray-400 dark:bg-gray-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
-                            )}
-                        </React.Fragment>
-                    ))}
-                </div>
-
-                {/* CARD */}
-                <form
-                    onSubmit={step === 1 ? checkEmailHandler : resetPasswordHandler}
-                    className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700
-                    rounded-2xl p-7 flex flex-col gap-4'
-                >
-                    {/* STEP 1 — EMAIL */}
-                    {step === 1 && (
+                {/* FORM or SUCCESS STATE */}
+                {!submitted ? (
+                    <form
+                        onSubmit={handleSubmit}
+                        className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700
+                        rounded-2xl p-7 flex flex-col gap-4'
+                    >
                         <div>
                             <label className='text-[11px] text-gray-400 dark:text-gray-500 mb-1.5 block'>
                                 Email address
@@ -131,72 +75,59 @@ const ForgotPassword = () => {
                                 required
                             />
                         </div>
-                    )}
 
-                    {/* STEP 2 — NEW PASSWORD */}
-                    {step === 2 && (
-                        <div>
-                            <label className='text-[11px] text-gray-400 dark:text-gray-500 mb-1.5 block'>
-                                New password
-                            </label>
-                            <div className='relative'>
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className={inputClass + ' pr-10'}
-                                    placeholder='••••••••'
-                                    required
-                                />
-                                <button
-                                    type='button'
-                                    onClick={() => setShowPassword(p => !p)}
-                                    className='absolute right-3 top-1/2 -translate-y-1/2
-                                    text-gray-400 dark:text-gray-500
-                                    hover:text-gray-600 dark:hover:text-gray-300 transition'
-                                >
-                                    {showPassword ? (
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                                            <line x1="1" y1="1" x2="23" y2="23" />
-                                        </svg>
-                                    ) : (
-                                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                            <circle cx="12" cy="12" r="3" />
-                                        </svg>
-                                    )}
-                                </button>
-                            </div>
+                        <button
+                            type='submit'
+                            disabled={loading}
+                            className='w-full py-3 rounded-xl text-sm font-medium
+                            bg-gray-900 dark:bg-white
+                            text-white dark:text-gray-900
+                            hover:opacity-90 disabled:opacity-50 transition'
+                        >
+                            {loading ? 'Sending...' : 'Send reset link'}
+                        </button>
+
+                        <button
+                            type='button'
+                            onClick={() => navigate('/login')}
+                            className='text-center text-xs text-gray-400 dark:text-gray-500
+                            hover:text-gray-700 dark:hover:text-gray-300 transition'
+                        >
+                            ← Back to login
+                        </button>
+                    </form>
+                ) : (
+                    <div className='bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700
+                        rounded-2xl p-7 flex flex-col gap-4 text-center'>
+
+                        {/* Email icon */}
+                        <div className='w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/40
+                            flex items-center justify-center mx-auto'>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                strokeLinejoin="round" className='text-purple-600 dark:text-purple-300'>
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
                         </div>
-                    )}
 
-                    {/* SUBMIT */}
-                    <button
-                        type='submit'
-                        disabled={loading}
-                        className='w-full py-3 rounded-xl text-sm font-medium
-                        bg-gray-900 dark:bg-white
-                        text-white dark:text-gray-900
-                        hover:opacity-90 disabled:opacity-50 transition'
-                    >
-                        {loading
-                            ? (step === 1 ? 'Checking...' : 'Updating...')
-                            : (step === 1 ? 'Continue' : 'Reset password')
-                        }
-                    </button>
+                        <p className='text-xs text-gray-400 dark:text-gray-500'>
+                            The link will expire in <strong>15 minutes</strong>.
+                            Check your spam folder if you don't see it.
+                        </p>
 
-                    {/* BACK */}
-                    <button
-                        type='button'
-                        onClick={() => step === 2 ? setStep(1) : navigate('/login')}
-                        className='text-center text-xs text-gray-400 dark:text-gray-500
-                        hover:text-gray-700 dark:hover:text-gray-300 transition'
-                    >
-                        ← {step === 2 ? 'Back to email' : 'Back to login'}
-                    </button>
-
-                </form>
+                        <button
+                            type='button'
+                            onClick={() => navigate('/login')}
+                            className='w-full py-3 rounded-xl text-sm font-medium
+                            bg-gray-900 dark:bg-white
+                            text-white dark:text-gray-900
+                            hover:opacity-90 transition'
+                        >
+                            Back to login
+                        </button>
+                    </div>
+                )}
 
             </div>
         </div>

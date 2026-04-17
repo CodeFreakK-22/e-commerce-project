@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
     phone: { type: String },
     wishlist: { type: Array, default: [] },
 
+    // Password reset fields
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date }
+
 }, { minimize: false });
 
 const userModel = mongoose.models.user || mongoose.model('user', userSchema);

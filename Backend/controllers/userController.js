@@ -1,31 +1,32 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import userModel from "../models/userModel.js";
+import transporter from "../config/nodemailer.js";
 
+// ================= HELPERS =================
 const createToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET);
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // ================= LOGIN =================
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-
         const user = await userModel.findOne({ email });
 
         if (!user) {
-            return res.json({ success: false, message: "User doesn't exist" });
+            return res.json({ success: false, message: "Invalid credentials" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
-
-        if (isMatch) {
-            const token = createToken(user._id);
-            res.json({ success: true, token });
-        } else {
-            res.json({ success: false, message: "Invalid credentials" });
+        if (!isMatch) {
+            return res.json({ success: false, message: "Invalid credentials" });
         }
+
+        const token = createToken(user._id);
+        res.json({ success: true, token });
 
     } catch (error) {
         res.json({ success: false, message: error.message });
@@ -37,11 +38,6 @@ const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        const exists = await userModel.findOne({ email });
-        if (exists) {
-            return res.json({ success: false, message: "User already exists" });
-        }
-
         if (!validator.isEmail(email)) {
             return res.json({ success: false, message: "Enter valid email" });
         }
@@ -50,19 +46,18 @@ const registerUser = async (req, res) => {
             return res.json({ success: false, message: "Password too short" });
         }
 
+        const exists = await userModel.findOne({ email });
+        if (exists) {
+            return res.json({ success: false, message: "User already exists" });
+        }
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = new userModel({
-            name,
-            email,
-            password: hashedPassword
-        });
-
+        const newUser = new userModel({ name, email, password: hashedPassword });
         const user = await newUser.save();
 
         const token = createToken(user._id);
-
         res.json({ success: true, token });
 
     } catch (error) {
@@ -79,7 +74,7 @@ const adminLogin = async (req, res) => {
             email === process.env.ADMIN_EMAIL &&
             password === process.env.ADMIN_PASSWORD
         ) {
-            const token = jwt.sign(email + password, process.env.JWT_SECRET);
+            const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1d" });
             res.json({ success: true, token });
         } else {
             res.json({ success: false, message: "Invalid credentials" });
@@ -93,9 +88,7 @@ const adminLogin = async (req, res) => {
 // ================= GET PROFILE =================
 const getProfile = async (req, res) => {
     try {
-        const user = await userModel
-            .findById(req.body.userId)
-            .select("-password");
+        const user = await userModel.findById(req.body.userId).select("-password");
 
         if (!user) {
             return res.json({ success: false, message: "User not found" });
@@ -114,11 +107,7 @@ const updateProfile = async (req, res) => {
         const { name, dob, phone } = req.body;
 
         const updatedUser = await userModel
-            .findByIdAndUpdate(
-                req.body.userId,
-                { name, dob, phone },
-                { new: true }
-            )
+            .findByIdAndUpdate(req.body.userId, { name, dob, phone }, { new: true })
             .select("-password");
 
         res.json({ success: true, user: updatedUser });
@@ -128,62 +117,77 @@ const updateProfile = async (req, res) => {
     }
 };
 
-// ================= CHECK EMAIL =================
-const checkEmail = async (req, res) => {
+// ================= FORGOT PASSWORD =================
+const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
 
-        const user = await userModel.findOne({ email });
-
-        if (!user) {
-            return res.json({
-                success: false,
-                message: "User not found"
-            });
-        }
-
-        res.json({
+        const SAME_RESPONSE = {
             success: true,
-            message: "Email exists"
+            message: "If this email is registered, you'll receive a reset link shortly."
+        };
+
+        const user = await userModel.findOne({ email });
+        if (!user) return res.json(SAME_RESPONSE);
+
+        const token = crypto.randomBytes(32).toString("hex");
+
+        user.resetToken = token;
+        user.resetTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+        await user.save();
+
+        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+        await transporter.sendMail({
+            from: process.env.SENDER_EMAIL,
+            to: user.email,
+            subject: "Password Reset Request",
+            html: `
+                <h2>Password Reset</h2>
+                <p>Click below to reset your password</p>
+                <a href="${resetLink}">Reset Password</a>
+                <p>This link expires in 15 minutes</p>
+            `
         });
+
+        res.json(SAME_RESPONSE);
 
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
 };
 
-// ================= DIRECT RESET PASSWORD =================
-const directResetPassword = async (req, res) => {
+// ================= RESET PASSWORD =================
+const resetPassword = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { token, password } = req.body;
 
-
-        if (password.length < 6) {
-            return res.json({
-                success: false,
-                message: "Password must be at least 6 characters"
-            });
+        if (!token) {
+            return res.json({ success: false, message: "Invalid token" });
         }
 
-        const user = await userModel.findOne({ email });
+        if (!password || password.length < 6) {
+            return res.json({ success: false, message: "Password too short" });
+        }
+
+        const user = await userModel.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: Date.now() }
+        });
 
         if (!user) {
-            return res.json({
-                success: false,
-                message: "User not found"
-            });
+            return res.json({ success: false, message: "Token expired or invalid" });
         }
 
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        user.password = await bcrypt.hash(password, salt);
 
-        user.password = hashedPassword;
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined;
+
         await user.save();
 
-        res.json({
-            success: true,
-            message: "Password reset successful"
-        });
+        res.json({ success: true, message: "Password reset successful" });
 
     } catch (error) {
         res.json({ success: false, message: error.message });
@@ -197,6 +201,6 @@ export {
     adminLogin,
     getProfile,
     updateProfile,
-    checkEmail,
-    directResetPassword
+    forgotPassword,
+    resetPassword
 };

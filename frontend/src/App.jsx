@@ -19,6 +19,7 @@ import Profile from './pages/Profile'
 import ForgotPassword from './pages/ForgotPassword'
 import OurPolicy from './components/OurPolicy'
 import WishList from './pages/WishList'
+import ResetPassword from './pages/ResetPassword'
 
 const App = () => {
   return (
@@ -50,6 +51,8 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/policy" element={<OurPolicy />} />
         <Route path="/wishlist" element={<WishList />} />
+        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/reset-password' element={<ResetPassword />} />
       </Routes>
       <Footer />
     </div>

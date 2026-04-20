@@ -5,17 +5,17 @@ const UserReviews = () => {
 
     const reviews = [
         {
-            name: "Dibyanshu",
+            name: "Dhaneswar",
             role: "Verified Buyer",
             text: "Amazing quality and super fast delivery. Totally worth it!"
         },
         {
-            name: "Sasmita",
+            name: "Somen",
             role: "Verified Buyer",
             text: "Loved the design and comfort. Will definitely shop again!"
         },
         {
-            name: "Smita",
+            name: "Gulshan",
             role: "Verified Buyer",
             text: "Smooth experience and great pricing. Highly recommended!"
         }
